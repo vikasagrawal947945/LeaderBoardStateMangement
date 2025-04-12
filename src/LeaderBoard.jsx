@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function LeaderBoard(){
       const [firstName , setFirstName]=useState("");
@@ -6,6 +6,15 @@ function LeaderBoard(){
       const [ country , setCountry]=useState("");
       const [score ,setScore] = useState(""); 
       const [data , setData] = useState([]);
+      const [flag ,setFlag] = useState(1);
+
+      useEffect(() => {
+        if (data.length > 0) {
+          const copy = [...data];
+          setData(copy.sort((a, b) => b.score - a.score));
+        }
+      }, [score, flag]);
+
       function handelSubmit(e){
       e.preventDefault();
        const obj = {
@@ -15,9 +24,10 @@ function LeaderBoard(){
          score: score
        };
        console.log(obj);
-       setData((data)=>{ const newData = [...data , obj];
-         return newData.sort((a,b)=>b.score - a.score) 
-       });
+       setData([...data , obj]);
+      //  setData((data)=>{ const newData = [...data , obj];
+      //    return newData.sort((a,b)=>b.score - a.score) 
+      //  });
       setFirstName("");
        setLastName("");
        setCountry("");
@@ -25,24 +35,31 @@ function LeaderBoard(){
        
       }
       function handelDelete(idToDelete){
-         setData((prevData)=>{
-          const updatedData = prevData.filter(obj=> obj.id !==idToDelete);
-          return updatedData.sort((a, b) => b.score - a.score);
-         });
+        //  setData((prevData)=>{
+        //   const updatedData = prevData.filter(obj=> obj.id !==idToDelete);
+        //   return updatedData.sort((a, b) => b.score - a.score);
+        //  });  this ssorting is done by now 
+         setData(data.filter(obj=> obj.id !==idToDelete));
+        
       }
       function modifyScore(id, sign) {
-        setData(prevData => {
-        const updatedData = prevData.map(obj =>
-          obj.id === id ? { ...obj, score: sign === "+" ? parseInt(obj.score) + 5  : parseInt(obj.score) - 5,}: obj );
-      
-          // Sort descending by score
-          return updatedData.sort((a, b) => b.score - a.score);
-        });
+        setFlag(flag*-1);
+       setData(data.map(obj =>
+          obj.id === id ? { ...obj, score: sign === "+" ? parseInt(obj.score) + 5  : parseInt(obj.score) - 5,}: obj ));
+
+
+        // setData(prevData => {
+        // const updatedData = prevData.map(obj =>
+        //   obj.id === id ? { ...obj, score: sign === "+" ? parseInt(obj.score) + 5  : parseInt(obj.score) - 5,}: obj );
+        //   // Sort descending by score
+        //   return updatedData.sort((a, b) => b.score - a.score);
+        // });   now this sorting is done by useEffect hook
       
       }
     
       return (
       <>
+     
       <form action="" onSubmit={handelSubmit} className="form">
       <input type="text" placeholder="First Name" value={firstName} onChange={(e)=>setFirstName(e.target.value)} required  />
        <input type="text" placeholder="Last Name" value={lastName} onChange={(e)=>setLastName(e.target.value)} required />

@@ -2,7 +2,12 @@
  
 
 body{
-     background-color :lavenderblush
+     background-image: url('../public/360_F_634705766_xRlKdJ4uNsEqNnkd9YZo6Mm25aEr3DZI.jpg'); /* image ka path yaha do */
+   
+     background-size: cover;                 /* screen ko poora cover kare */
+     background-position: center;            /* image center me ho */
+     background-repeat: no-repeat;           /* repeat na ho */
+     background-attachment: fixed; 
  }
 .form {
      margin: 10px 50px;
@@ -18,7 +23,10 @@ input ,select{
       border: 1px solid black;
       border-radius: 5px;
       cursor: pointer;
-      color: black;
+      color: white;
+}
+select {
+      color: black
 }
 input::placeholder {
     color: red;
